@@ -20,7 +20,7 @@ app.use(bodyParser.json());
 
 
 app.post('/repos', function (req, res) {
-  var query = Object.keys(req.body)[0];
+  var query = req.body.search;
   // req.on('data', (chunk) => {
   //   query += chunk;
   // })
@@ -36,7 +36,6 @@ app.post('/repos', function (req, res) {
 app.get('/repos', function (req, res) {
   db.retrieve((repos) => {
     helpers.retrieve25HighestForkedRepos(repos, (sortedRepos) => {
-      console.log('our DB has these repos: ', sortedRepos);
       res.send(JSON.stringify(sortedRepos));
     });
   });

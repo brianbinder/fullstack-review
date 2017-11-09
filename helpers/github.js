@@ -29,7 +29,9 @@ var retrieve25HighestForkedRepos = (repos, cb) => {
     return 0;
   }
   repos.sort(sortFunc);
-  cb(repos.slice(0, 24));
+  console.log('From helpers/github.js, retrieve25HighestForkedRepos function:');
+  console.log('There are this many repos in Mongo: ', repos.length);
+  cb(repos.slice(0, 25));
 }
 
 module.exports.getReposByUsername = getReposByUsername;

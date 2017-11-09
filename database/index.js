@@ -27,7 +27,7 @@ let save = (repos, cb) => {
       });
       newRepo.save(function(err, newRepo) {
         if (err) {
-          console.log('Duplicate entries not allowed: ', err);
+          console.log('database/index.js save function: Duplicate entries not allowed');
         } else {
           console.log('new repo added to database');
         }

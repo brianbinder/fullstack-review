@@ -15,15 +15,35 @@ class App extends React.Component {
 
   search (term) {
     console.log(`${term} was searched`);
+    var context = this;
     $.ajax({
       type: "POST",
       url: 'http://127.0.0.1:1128/repos',
-      data: term,
+      data: {search: term},
       datatype: 'application/json',
       success: function(res) {
         console.log('post request sent ', res);
+        context.requestRepos();
       }
     });
+  }
+
+  requestRepos() {
+    var context = this;
+    $.ajax({
+      type: 'GET',
+      url: 'http://127.0.0.1:1128/repos',
+      success: function(res) {
+        var repos = JSON.parse(res);
+        context.setState({
+          repos: repos
+        });
+      }
+    });
+  }
+
+  componentDidMount () {
+    this.requestRepos();
   }
 
   render () {
