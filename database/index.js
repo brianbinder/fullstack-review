@@ -16,24 +16,24 @@ let repoSchema = mongoose.Schema({
 let Repo = mongoose.model('Repo', repoSchema);
 
 let save = (repos, cb) => {
-  //how to avoid saving duplicates in Mongo?
-  //console.log(Array.isArray(JSON.parse(repos)));
-  repos.forEach(function(repo) {
-    var newRepo = new Repo({
-      id: repo.id,
-      owner: repo.owner.login,
-      name: repo.name,
-      url: repo.html_url,
-      forks: repo.forks_count
+  if (Array.isArray(repos)) {
+    repos.forEach(function(repo) {
+      var newRepo = new Repo({
+        id: repo.id,
+        owner: repo.owner.login,
+        name: repo.name,
+        url: repo.html_url,
+        forks: repo.forks_count
+      });
+      newRepo.save(function(err, newRepo) {
+        if (err) {
+          console.log('Duplicate entries not allowed: ', err);
+        } else {
+          console.log('new repo added to database');
+        }
+      });
     });
-    newRepo.save(function(err, newRepo) {
-      if (err) {
-        console.log('Duplicate entries not allowed: ', err);
-      } else {
-        console.log('new repo added to database');
-      }
-    });
-  });
+  }
   cb();
 }
 

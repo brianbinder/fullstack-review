@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const helpers = require('../helpers/github.js');
 const db = require('../database/index.js');
 let app = express();
@@ -11,18 +12,25 @@ app.use(function(req, res, next) {
   next();
 });
 
+app.use(bodyParser.urlencoded({
+  extended: false
+}));
+
+app.use(bodyParser.json());
+
+
 app.post('/repos', function (req, res) {
-  var query = '';
-  req.on('data', (chunk) => {
-    query += chunk;
-  })
-  req.on('end', () => {
-    helpers.getReposByUsername(query, (results) => {
-      db.save(JSON.parse(results), () => {
-        res.send('10-4 good buddy.  You searched: ' + query);
-      });
+  var query = Object.keys(req.body)[0];
+  // req.on('data', (chunk) => {
+  //   query += chunk;
+  // })
+  // req.on('end', () => {
+  helpers.getReposByUsername(query, (results) => {
+    db.save(JSON.parse(results), () => {
+      res.send('10-4 good buddy.  You searched: ' + query);
     });
   });
+  //});
 });
 
 app.get('/repos', function (req, res) {
