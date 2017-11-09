@@ -1,5 +1,6 @@
 const express = require('express');
 const helpers = require('../helpers/github.js');
+const db = require('../database/index.js');
 let app = express();
 
 app.use(express.static(__dirname + '/../client/dist'));
@@ -17,15 +18,20 @@ app.post('/repos', function (req, res) {
   })
   req.on('end', () => {
     helpers.getReposByUsername(query, (results) => {
-      console.log('Github sent this: ', results);
-      res.send('10-4 good buddy.  You searched: ' + query);
+      db.save(JSON.parse(results), () => {
+        res.send('10-4 good buddy.  You searched: ' + query);
+      });
     });
   });
 });
 
 app.get('/repos', function (req, res) {
-  // TODO - your code here!
-  // This route should send back the top 25 repos
+  db.retrieve((repos) => {
+    helpers.retrieve25HighestForkedRepos(repos, (sortedRepos) => {
+      console.log('our DB has these repos: ', sortedRepos);
+      res.send(JSON.stringify(sortedRepos));
+    });
+  });
 });
 
 let port = 1128;

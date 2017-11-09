@@ -18,4 +18,19 @@ let getReposByUsername = (query, cb) => {
 
 }
 
+var retrieve25HighestForkedRepos = (repos, cb) => {
+  var sortFunc = (a, b) => {
+    if (a.forks < b.forks) {
+      return 1;
+    }
+    if (a.forks > b.forks) {
+      return -1;
+    }
+    return 0;
+  }
+  repos.sort(sortFunc);
+  cb(repos.slice(0, 24));
+}
+
 module.exports.getReposByUsername = getReposByUsername;
+module.exports.retrieve25HighestForkedRepos = retrieve25HighestForkedRepos;
