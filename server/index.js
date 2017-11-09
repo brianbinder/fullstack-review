@@ -25,9 +25,10 @@ app.post('/repos', function (req, res) {
   //   query += chunk;
   // })
   // req.on('end', () => {
+  res.send('10-4 good buddy.  You searched: ' + query);
   helpers.getReposByUsername(query, (results) => {
     db.save(JSON.parse(results), () => {
-      res.send('10-4 good buddy.  You searched: ' + query);
+      console.log('save complete');
     });
   });
   //});

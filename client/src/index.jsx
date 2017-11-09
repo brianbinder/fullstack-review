@@ -18,11 +18,10 @@ class App extends React.Component {
     var context = this;
     $.ajax({
       type: "POST",
-      url: 'http://127.0.0.1:1128/repos',
+      url: '/repos',
       data: {search: term},
       datatype: 'application/json',
       success: function(res) {
-        console.log('post request sent ', res);
         context.requestRepos();
       }
     });
@@ -32,7 +31,7 @@ class App extends React.Component {
     var context = this;
     $.ajax({
       type: 'GET',
-      url: 'http://127.0.0.1:1128/repos',
+      url: '/repos',
       success: function(res) {
         var repos = JSON.parse(res);
         context.setState({
